@@ -1,0 +1,90 @@
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+const ListingDetailPage = () => {
+  const { id } = useParams();
+  const [listing, setListing] = useState(null);
+  const [error, setError] = useState('');
+
+  // Проверяем, загружается ли компонент
+  console.log('Component ListingDetailPage loaded');
+
+  // Запрос для получения данных об объявлении
+  useEffect(() => {
+    console.log('useEffect for fetching listing triggered');
+    axios.get(`http://127.0.0.1:8000/listings/cardetails/${id}/`)
+      .then(response => {
+        console.log('Listing data:', response.data);
+        setListing(response.data);
+      })
+      .catch(error => setError('Failed to load listing details'));
+  }, [id]);
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!listing) {
+    return <p>Loading...</p>;
+  }
+
+  const containerStyle = {
+  padding: '20px',
+  maxWidth: '600px',
+  margin: 'auto',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  backgroundColor: '#f9f9f9',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+};
+
+const imgStyle = {
+  width: '100%',
+  height: 'auto',
+  borderRadius: '8px',
+  margin: '20px 0',
+};
+
+const titleStyle = {
+  fontSize: '24px',
+  marginBottom: '10px',
+  color: '#333',
+};
+
+const priceStyle = {
+  fontSize: '18px',
+  fontWeight: 'bold',
+  margin: '10px 0',
+};
+
+const detailStyle = {
+  fontSize: '16px',
+  marginBottom: '10px',
+  color: '#555',
+};
+
+const statsContainerStyle = {
+  marginTop: '20px',
+  padding: '10px',
+  backgroundColor: '#e9ecef',
+  borderRadius: '8px',
+};
+
+const statItemStyle = {
+  marginBottom: '8px',
+  fontSize: '16px',
+};
+
+return (
+  <div style={containerStyle}>
+    <h2 style={titleStyle}>{listing.title}</h2>
+    <p style={detailStyle}>{listing.description}</p>
+    <p style={priceStyle}>Price: {listing.price} {listing.currency}</p>
+    <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
+  </div>
+);
+
+};
+
+export default ListingDetailPage;
