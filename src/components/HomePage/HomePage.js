@@ -49,12 +49,13 @@ const links = [
 
   { path: '/listingcreate', label: 'Create Listing' },
       { path: '/listings/update/:id', label: 'Update Listing' },
- { path: '/details/:id', label: 'Car Listing Details including stats for premium sellers (open page from All Car Listings)' },
-  { path: '/listingsuser', label: "User's Listings" },
-  { path: '/listings/:id', label: 'Listing Detail (open page from lists)' },
-  { path: '/list', label: 'All Car Listings' },
 
-  { path: '/delete/:id', label: 'Delete Listing (open page from lists)' },
+      { path: '/list', label: 'All Car Listings' },
+ { path: '/details/:id', label: 'Car Listing Details including stats for premium sellers (open page from All Car Listings)' },
+   { path: '/listingsuser', label: "User's Listings" },
+  { path: '/listings/:id', label: 'Listing Detail (open page from User\'s Listings)' },
+        { path: '/delete/:id', label: 'Delete Listing (open page from User\'s Listings)' },
+
 
 ];
 
