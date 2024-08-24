@@ -6,7 +6,7 @@ const DeleteAccount = () => {
 
     const handleDelete = async () => {
         try {
-            const response = await axios.delete('http://127.0.0.1:8000/users/delete-account/');
+            const response = await axios.delete('/api/users/delete-account/');
             setMessage('Your account has been deleted successfully.');
         } catch (error) {
             setMessage('Failed to delete your account.');

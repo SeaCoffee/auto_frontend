@@ -7,7 +7,7 @@ const CarListingsListPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/listings/list/')
+    axios.get('/api/listings/list/')
       .then(response => {
         console.log(response.data);  // Проверка структуры данных
         setListings(response.data.data);  // Обращаемся к полю data, содержащему массив

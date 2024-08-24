@@ -9,7 +9,7 @@ const PasswordReset = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post(`http://127.0.0.1:8000/auth/recovery/${token}`, { password })
+        axios.post(`api/auth/recovery/${token}`, { password })
             .then(response => {
                 setMessage('Password has been reset successfully.');
             })

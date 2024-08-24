@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000'; // Базовый URL для всех запросов
+axios.defaults.baseURL = 'http://localhost';
 
-// Добавляем интерсептор для добавления токена
+
 axios.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');
-        console.log('Interceptor is working, token:', token); // Проверка работы интерсептора
+        console.log('Interceptor is working, token:', token);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -16,6 +16,7 @@ axios.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
 
 export default axios;
 

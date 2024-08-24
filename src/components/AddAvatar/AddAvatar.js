@@ -11,7 +11,7 @@ const AddAvatar = () => {
         formData.append('avatar', file);
 
         try {
-            const response = await axios.put('http://127.0.0.1:8000/users/avatars/', formData, {
+            const response = await axios.put('api/users/avatars/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

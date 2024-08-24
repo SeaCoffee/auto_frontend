@@ -8,7 +8,7 @@ const RemoveFromBlacklist = () => {
     const handleRemove = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete('http://127.0.0.1:8000/users/blacklist/manage/', { data: { user_id: userId } });
+            const response = await axios.delete('api/users/blacklist/manage/', { data: { user_id: userId } });
             setMessage('User removed from blacklist successfully');
         } catch (error) {
             setMessage('Error removing user from blacklist');

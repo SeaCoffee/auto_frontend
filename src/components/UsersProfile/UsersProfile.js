@@ -9,7 +9,7 @@ const ProfileDetail = () => {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://127.0.0.1:8000/users/profile/', {
+                const response = await axios.get('/api/users/profile/', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

@@ -15,7 +15,7 @@ const UpdateListingPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/listings/details/${id}/`)  // Измените URL здесь
+    axios.get(`/api/listings/details/${id}/`)  // Измените URL здесь
       .then(response => setListing(response.data))
       .catch(error => setError('Failed to load listing data'));
   }, [id]);
@@ -41,7 +41,7 @@ const UpdateListingPage = () => {
     formData.append('listing_photo', listing.listing_photo);
   }
 
-  axios.put(`http://127.0.0.1:8000/listings/update/${id}/`, formData)
+  axios.put(`/api/listings/update/${id}/`, formData)
     .then(() => navigate('/listingsuser'))
     .catch(error => setError('Failed to update listing'));
 };

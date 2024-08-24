@@ -8,7 +8,7 @@ const ActivateAccount = () => {
     const [status, setStatus] = useState('Loading...');
 
     useEffect(() => {
-    const activateUrl = `http://127.0.0.1:8000/auth/activate/${token}/`;
+    const activateUrl = `/api/auth/activate/${token}/`;
     console.log("Activating URL: ", activateUrl);  // добавьте это для проверки
     axios.post(activateUrl)
         .then(response => {

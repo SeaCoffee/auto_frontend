@@ -12,7 +12,7 @@ const UserCreate = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://127.0.0.1:8000/users/', userData);
+            await axios.post('api/users/', userData);
             setMessage('User created successfully.');
         } catch (error) {
             setMessage('Failed to create user.');

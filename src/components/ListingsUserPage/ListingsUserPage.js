@@ -7,7 +7,7 @@ const ListingsUserPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-  axios.get('http://127.0.0.1:8000/listings/user/')
+  axios.get('api/listings/user/')
     .then(response => {
       console.log(response.data.data);  // Выводим данные в консоль
       setListings(response.data.data);

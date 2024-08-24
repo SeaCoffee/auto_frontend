@@ -19,7 +19,7 @@ function RegistrationPage() {
         // Загрузка списка ролей при монтировании компонента
         const fetchRoles = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/auth/roles/');
+                const response = await axios.get('/api/auth/roles/');
                 setRoles(response.data.data); // Получаем массив ролей из поля `data`
             } catch (error) {
                 console.error('Failed to fetch roles', error);
@@ -54,7 +54,7 @@ function RegistrationPage() {
     };
 
     try {
-        const response = await axios.post('http://127.0.0.1:8000/users/', user);
+        const response = await axios.post('/api/users/', user);
         console.log('Registration successful', response.data);
     } catch (error) {
         console.error('Registration error', error.response.data);

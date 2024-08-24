@@ -33,7 +33,7 @@ const CarListingDetailPage = () => {
   useEffect(() => {
     if (userData) {
       console.log('Fetching listing data...');
-      axios.get(`http://127.0.0.1:8000/listings/details/${id}/`)
+      axios.get(`/api/listings/details/${id}/`)
         .then(response => {
           console.log('Listing data:', response.data);
           setListing(response.data);
@@ -45,7 +45,7 @@ const CarListingDetailPage = () => {
 
       if (userData.account_type === 'premium') {
         console.log('Fetching statistics...');
-        axios.get(`http://127.0.0.1:8000/listings/premium/${id}/stats/`, {
+        axios.get(`/api/listings/premium/${id}/stats/`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }

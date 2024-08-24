@@ -12,7 +12,7 @@ const CreateManager = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post('http://127.0.0.1:8000/users/create_manager/', managerData);
+            await axios.post('api/create_manager/', managerData);
             setMessage('Manager created successfully.');
         } catch (error) {
             setMessage('Failed to create manager.');

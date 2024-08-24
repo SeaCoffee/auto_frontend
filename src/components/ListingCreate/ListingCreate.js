@@ -54,7 +54,7 @@ function ListingCreate() {
     useEffect(() => {
         const fetchBrandModelData = async () => {
             try {
-                const {data} = await axios.get('http://127.0.0.1:8000/cars/data/');
+                const {data} = await axios.get('api/cars/data/');
                 setBrandsModels(data);
             } catch (error) {
                 setError('Ошибка при загрузке данных о брендах и моделях');
@@ -67,7 +67,7 @@ function ListingCreate() {
     useEffect(() => {
         const fetchRegions = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/listings/regions/');
+                const response = await axios.get('api/listings/regions/');
 
                 setRegions(response.data.regions);
                 console.log('Загруженные регионы:', response.data.regions);
@@ -82,7 +82,7 @@ function ListingCreate() {
     useEffect(() => {
         const fetchCurrencies = async () => {
             try {
-                const {data} = await axios.get('http://127.0.0.1:8000/currencies/list/')
+                const {data} = await axios.get('api/currencies/list/')
 
                 setCurrencies(data);
 
@@ -114,7 +114,7 @@ function ListingCreate() {
         }
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/listings/create/', formDataToSend, {
+            const response = await axios.post('api/listings/create/', formDataToSend, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

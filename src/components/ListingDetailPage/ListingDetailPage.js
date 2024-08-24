@@ -13,7 +13,7 @@ const ListingDetailPage = () => {
   // Запрос для получения данных об объявлении
   useEffect(() => {
     console.log('useEffect for fetching listing triggered');
-    axios.get(`http://127.0.0.1:8000/listings/cardetails/${id}/`)
+    axios.get(`api/listings/cardetails/${id}/`)
       .then(response => {
         console.log('Listing data:', response.data);
         setListing(response.data);

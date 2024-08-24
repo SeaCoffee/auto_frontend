@@ -6,7 +6,7 @@ const UserDetailsPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/users/user/', { // Убедитесь, что этот эндпоинт возвращает данные, как описано
+    axios.get('/api/users/user/', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }

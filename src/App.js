@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-
+import './AxiosConfig';
 import LogIn from './components/LogIn/LogIn';
 import HomePage from './components/HomePage/HomePage';
 import ActivateAccount from './components/ActivateAccount/ActivateAccount';
@@ -14,7 +14,6 @@ import UpgradeAccount from "./components/UpgradeAccount/UpgradeAccount";
 import DeleteAccount from "./components/UserDelete/UserDelete";
 import LogOut from "./components/LogOut/LogOut";
 import ListingCreate from "./components/ListingCreate/ListingCreate";
-import './AxiosConfig';
 import UpdateListingPage from "./components/UpdateListingPage/UpdateListingPage";
 import ListingsUserPage from "./components/ListingsUserPage/ListingsUserPage";
 import ListingDetailPage from "./components/ListingDetailPage/ListingDetailPage";

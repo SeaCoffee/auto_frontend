@@ -8,7 +8,7 @@ const UpgradeAccount = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put('http://127.0.0.1:8000/users/upgrade_account/', { account_type: accountType });
+            const response = await axios.put('/api/users/upgrade_account/', { account_type: accountType });
             setMessage('Account upgraded successfully.');
         } catch (error) {
                 setMessage(`Failed to upgrade account: ${error.response.data.detail}`);

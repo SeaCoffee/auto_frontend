@@ -9,7 +9,7 @@ const AddToBlacklist = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/users/blacklist/manage/', { user_id: userId, reason: reason });
+            const response = await axios.post('api/users/blacklist/manage/', { user_id: userId, reason: reason });
             setMessage('User has been successfully added to the blacklist.');
         } catch (error) {
             setMessage('Failed to add user to blacklist.');

@@ -25,23 +25,32 @@ const LogIn = () => {
         }
     }, [navigate]);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/auth/', { username, password });
-            const { access } = response.data;
-            localStorage.setItem('token', access);
-            console.log('Token saved:', access); // Проверка сохранения токена
-            // Очищаем поля формы
-            setUsername('');
-            setPassword('');
-            // Перенаправляем на главную страницу или другую защищенную страницу
-            navigate('/');
-        } catch (err) {
-            console.error('Login Error:', err.response || err.message);
-            setError('Ошибка входа: ' + (err.response?.data?.detail || err.message));
-        }
-    };
+   const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+        // Проверка текущего baseURL перед отправкой запроса
+        console.log('URL before request:', axios.defaults.baseURL);
+
+        // Явно указываем baseURL для этого конкретного запроса
+        const response = await axios.post('/api/auth/', { username, password }, {
+        });
+
+        const { access } = response.data;
+        localStorage.setItem('token', access);
+        console.log('Token saved:', access); // Проверка сохранения токена
+
+        // Очистка полей после успешного входа
+        setUsername('');
+        setPassword('');
+
+        // Перенаправление на главную страницу
+        navigate('/');
+    } catch (err) {
+        console.error('Login Error:', err.response || err.message);
+        setError('Ошибка входа: ' + (err.response?.data?.detail || err.message));
+    }
+};
+
 
     return (
         <form onSubmit={handleSubmit}>
