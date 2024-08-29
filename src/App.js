@@ -21,6 +21,8 @@ import CarListingDetailPage from "./components/CarListingDetailsPage/CarListings
 import CarListingsListPage from "./components/CarListingsListPage/CarListingsListPage";
 import DeleteListingPage from "./components/ListingsDeletion/ListingsDeletion";
 import RegistrationPage from "./components/RegistrationPage/RegistrationPage";
+import PasswordRecoveryRequest from "./components/RecoveryPassword/PasswordRecoveryRequest";
+import PasswordReset from "./components/RecoveryPassword/PasswordReset";
 
 
 
@@ -38,6 +40,8 @@ export const App = () => {
                 <Route path="/addblacklist" element={<AddToBlacklist />} />
                 <Route path="/removeblacklist" element={<RemoveFromBlackList />} />
               <Route path="/addavatar" element={<AddAvatar />} />
+                <Route path="/recoverpassword" element={<PasswordRecoveryRequest/>} />
+                <Route path="/recovery/:token" element={<PasswordReset/>} />
                 <Route path="/createmanager" element={<CreateManager />} />
                 <Route path="/upgradeaccount" element={<UpgradeAccount />} />
                 <Route path="/deleteaccount" element={<DeleteAccount />} />

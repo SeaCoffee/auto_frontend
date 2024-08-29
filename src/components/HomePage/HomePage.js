@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import {Link, Route} from 'react-router-dom';
 import UsersDetailsPage from "../UsersDetailsPage/UsersDetailsPage";
+import PasswordRecoveryRequest from "../RecoveryPassword/PasswordRecoveryRequest";
+import PasswordReset from "../RecoveryPassword/PasswordReset";
 
 const LinkItem = ({ to, children }) => {
   const [hover, setHover] = useState(false);
@@ -39,6 +41,8 @@ const links = [
     { path: '/upgradeaccount', label: 'Upgrade Account' },
   { path: '/deleteaccount', label: 'Delete Account' },
   { path: '/logout', label: 'Log Out' },
+    { path: "/recoverpassword", label: 'new password request'},
+    {path: "/recovery/:token", label: 'reset password'},
 
 
      { path: '/createmanager', label: 'Create Manager (for superuser)' },

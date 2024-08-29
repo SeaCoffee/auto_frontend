@@ -19,7 +19,7 @@ function RegistrationPage() {
         // Загрузка списка ролей при монтировании компонента
         const fetchRoles = async () => {
             try {
-                const response = await axios.get('/api/auth/roles/');
+                const response = await axios.get('http://localhost/api/auth/roles/');
                 setRoles(response.data.data); // Получаем массив ролей из поля `data`
             } catch (error) {
                 console.error('Failed to fetch roles', error);
@@ -49,13 +49,24 @@ function RegistrationPage() {
         email: formData.email,
         username: formData.username,
         password: formData.password,
-        role: formData.roleId,  // Обратите внимание, что это roleId, если бекенд принимает это поле
+        role: formData.roleId,
         profile: profileData,
     };
 
     try {
-        const response = await axios.post('/api/users/', user);
+        const response = await axios.post('http://localhost/api/users/', user);
         console.log('Registration successful', response.data);
+        // Очищаем данные формы после успешной отправки
+        setFormData({
+            email: '',
+            username: '',
+            password: '',
+            name: '',
+            surname: '',
+            age: '',
+            city: '',
+            roleId: '',
+        });
     } catch (error) {
         console.error('Registration error', error.response.data);
     }

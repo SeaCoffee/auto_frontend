@@ -7,7 +7,7 @@ const PasswordRecoveryRequest = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('api/auth/recovery/', { email })
+        axios.post('http://localhost/api/auth/recovery/', { email })
             .then(response => {
                 setMessage('Check your email for the password reset link.');
             })
