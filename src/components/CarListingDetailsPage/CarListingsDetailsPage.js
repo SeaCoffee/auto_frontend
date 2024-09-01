@@ -11,8 +11,11 @@ const CarListingDetailPage = () => {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState('');
   const [userData, setUserData] = useState(null);
+  const [message, setMessage] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
 
-  // Первый useEffect для декодирования токена
+  // Первый useEffect для декодирования токена и получения данных
   useEffect(() => {
     console.log('Attempting to decode token...');
     const token = localStorage.getItem('token');
@@ -21,46 +24,89 @@ const CarListingDetailPage = () => {
         const decodedToken = jwtDecode(token);
         console.log('Token decoded:', decodedToken);
         setUserData(decodedToken);
+
+        // Получение данных объявления
+        axios.get(`/api/listings/cardetails/${id}/`)
+          .then(response => {
+            console.log('Listing data:', response.data);
+            setListing(response.data);
+          })
+          .catch(error => {
+            console.error('Failed to load listing details:', error);
+            setError('Failed to load listing details');
+          });
+
+        if (decodedToken.account_type === 'premium') {
+          console.log('Fetching statistics...');
+          axios.get(`/api/listings/premium/${id}/stats/`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          })
+            .then(response => {
+              console.log('Stats data:', response.data);
+              setStats(response.data);
+            })
+            .catch(error => {
+              console.error('Failed to load statistics:', error);
+              setError('Failed to load statistics');
+            });
+        }
+
       } catch (error) {
         console.error('Failed to decode token:', error);
       }
     } else {
       console.error('Token not found');
     }
-  }, []);
+  }, [id]);
 
-  // Второй useEffect для выполнения запросов
+  // Подключение к WebSocket
   useEffect(() => {
-    if (userData) {
-      console.log('Fetching listing data...');
-      axios.get(`/api/listings/details/${id}/`)
-        .then(response => {
-          console.log('Listing data:', response.data);
-          setListing(response.data);
-        })
-        .catch(error => {
-          console.error('Failed to load listing details:', error);
-          setError('Failed to load listing details');
-        });
+    const connectToSocket = async () => {
+      const socketToken = await axios.get('/api/auth/soket/');
+      if (socketToken) {
+        const newSocket = new WebSocket(`ws://localhost/api/chat/${id}/?token=${socketToken.data.token}`);
 
-      if (userData.account_type === 'premium') {
-        console.log('Fetching statistics...');
-        axios.get(`/api/listings/premium/${id}/stats/`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-          .then(response => {
-            console.log('Stats data:', response.data);
-            setStats(response.data);
-          })
-          .catch(error => {
-            console.error('Failed to load statistics:', error);
-            setError('Failed to load statistics');
-          });
+        newSocket.onopen = () => {
+          console.log('WebSocket connected');
+        };
+
+        newSocket.onmessage = (event) => {
+          const messageData = JSON.parse(event.data);
+              console.log("Получено сообщение:", messageData);  // Это добавьте
+          setChatMessages((prevMessages) => [...prevMessages, messageData]);
+        };
+
+        newSocket.onclose = () => {
+          console.log('WebSocket disconnected');
+        };
+
+        setSocket(newSocket);
       }
+    };
+
+    connectToSocket();
+
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
+  }, [id]);
+
+  // Функция для отправки сообщения
+  const sendMessage = () => {
+    if (socket && message.trim()) {
+      socket.send(JSON.stringify({
+        action: 'send_message',
+        data: message,
+        request_id: id
+      }));
+      setChatMessages((prevMessages) => [...prevMessages, { message: message, user: 'You' }]);
+      setMessage('');
     }
-  }, [userData, id]);
+  };
 
   if (error) {
     return <p>{error}</p>;
@@ -136,9 +182,25 @@ return (
         <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country}</p>
       </div>
     )}
+
+      <div>
+        <h3>Chat with Seller</h3>
+        <div>
+           {chatMessages.map((msg, index) => (
+          <div key={index}>{msg.user}: {msg.message}</div>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <button onClick={sendMessage}>Send</button>
+      </div>
   </div>
 );
 
 };
 
 export default CarListingDetailPage
+

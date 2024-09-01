@@ -16,7 +16,7 @@ function ListingCreate() {
         model_name: '',
         body_type: ''
     });
-    const [brandsModels, setBrandsModels] = useState({brands: [], brandsModels: {}});
+    const [brandsModels, setBrandsModels] = useState({ brands: [], brandsModels: {} });
     const [selectedBrand, setSelectedBrand] = useState('');
     const [models, setModels] = useState([]);
     const [regions, setRegions] = useState([]);
@@ -25,13 +25,12 @@ function ListingCreate() {
     const [currencies, setCurrencies] = useState([]);
     const [stats, setStats] = useState(null);
 
-
     const formStyle = {
         display: 'flex',
         flexDirection: 'column',
         maxWidth: '500px',
         margin: 'auto',
-        gap: '10px', // Промежуток между полями
+        gap: '10px',
     };
 
     const inputStyle = {
@@ -52,161 +51,226 @@ function ListingCreate() {
     };
 
     useEffect(() => {
-        const fetchBrandModelData = async () => {
-            try {
-                const {data} = await axios.get('api/cars/data/');
-                setBrandsModels(data);
-            } catch (error) {
-                setError('Ошибка при загрузке данных о брендах и моделях');
-            }
-        };
-        fetchBrandModelData();
-    }, []);
-
+    const fetchBrandModelData = async () => {
+        try {
+            const { data } = await axios.get('api/cars/data/');
+            console.log('Загруженные данные о брендах и моделях:', data); // Логирование данных
+            setBrandsModels(data);
+        } catch (error) {
+            setError('Ошибка при загрузке данных о брендах и моделях');
+        }
+    };
+    fetchBrandModelData();
+}, []);
 
     useEffect(() => {
         const fetchRegions = async () => {
             try {
-                const response = await axios.get('api/listings/regions/');
-
-                setRegions(response.data.regions);
-                console.log('Загруженные регионы:', response.data.regions);
+                const { data } = await axios.get('api/listings/regions/');
+                setRegions(data.regions);
             } catch (error) {
                 console.error('Ошибка при загрузке регионов:', error);
             }
         };
-
         fetchRegions();
     }, []);
+
+    const renderRegions = () => {
+        if (!regions || !Array.isArray(regions)) {
+            return <option value="">Нет доступных регионов</option>;
+        }
+
+        return regions.map((region, index) => (
+            <option key={index} value={region[0]}>
+                {region[1]}
+            </option>
+        ));
+    };
 
     useEffect(() => {
         const fetchCurrencies = async () => {
             try {
-                const {data} = await axios.get('api/currencies/list/')
-
+                const { data } = await axios.get('api/currencies/list/');
                 setCurrencies(data);
-
-                console.log('Загруженные валюты:', data);
             } catch (error) {
                 console.error('Ошибка при загрузке валют:', error);
             }
         };
-
         fetchCurrencies();
     }, []);
 
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const token = localStorage.getItem('token');
 
-        const token = localStorage.getItem('token');
-        console.log('token:', token);
-        console.log('Sending request with token:', `Bearer ${token}`);
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach(key => {
+        let value = formData[key];
+        if (['price', 'year', 'engine', 'currency', 'brand', 'model_name'].includes(key)) {
+            value = parseInt(value, 10);
+        }
+        formDataToSend.append(key, value);
+    });
 
-        const formDataToSend = new FormData();
-        Object.keys(formData).forEach(key => {
-            formDataToSend.append(key, formData[key]);
+    try {
+        const response = await axios.post('api/listings/create/', formDataToSend, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
-        // Логирование для проверки отправляемых данных
-        for (let pair of formDataToSend.entries()) {
-            console.log(`${pair[0]}: ${pair[1]}`);
+        if (response.status === 201) {
+            console.log('Объявление успешно создано', response.data);
+            navigate(`/listingsuser`);
         }
 
-        try {
-            const response = await axios.post('api/listings/create/', formDataToSend, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+        navigate(`/upload-photo/${response.data.id}`);
+    } catch (error) {
+        console.error('Ошибка запроса:', error.response?.data || error.message);
+        setError(error.response?.data?.detail || 'Произошла ошибка при создании объявления');
+    }
+};
 
-            navigate(`/upload-photo/${response.data.id}`);
-        } catch (error) {
-            console.error('Ошибка запроса:', error.response || error);
-            setError(error.response?.data?.detail || 'Произошла ошибка при создании объявления');
-        }
-    };
 
-    const handleBrandChange = (event) => {
-        const brandId = event.target.value;
-        setSelectedBrand(brandId);
-        setFormData({...formData, brand: brandId, model_name: ''});
+const handleBrandChange = (event) => {
+    const brandId = event.target.value;
+    setSelectedBrand(brandId);
+    setFormData({ ...formData, brand: brandId, model_name: '' });
 
-        // Используем brandId напрямую, если brands_models настроен как объект, где ключи — это brandId
+    if (brandsModels && brandsModels.brands_models) {
+        console.log('Выбранный бренд ID:', brandId);
+
+        // Получаем модели для выбранного бренда
         const filteredModels = brandsModels.brands_models[brandId] || [];
-        console.log(filteredModels); // Проверьте фильтрованные модели
+
+        console.log('Доступные модели для бренда:', filteredModels);
         setModels(filteredModels);
-    };
+    } else {
+        console.error('brandsModels.brands_models не определен или пуст');
+        setModels([]); // Сбрасываем модели, если данные отсутствуют
+    }
+};
+
+
 
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
-
-        // Если это регион, переводим значение в нижний регистр, кроме первой буквы
-        if (name === "region") {
-            const formattedValue = value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-            setFormData(prev => ({
-                ...prev,
-                [name]: formattedValue
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
-
-        console.log(`Изменение ${name}: ${value}`);
+        const { name, value } = event.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
-
 
     const handleFileChange = (event) => {
-        setFormData({...formData, listing_photo: event.target.files[0]});
-    };
+    setFormData({ ...formData, listing_photo: event.target.files[0] });
+};
 
 
     return (
-        <form onSubmit={handleSubmit} style={formStyle}>
-            <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Title"
-                   style={inputStyle}/>
-            <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description"
-                      style={{...inputStyle, height: '100px'}}/>
-            <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price"
-                   style={inputStyle}/>
-            <input type="number" name="year" value={formData.year} onChange={handleChange} placeholder="Year"
-                   style={inputStyle}/>
-            <input type="text" name="engine" value={formData.engine} onChange={handleChange} placeholder="Engine"
-                   style={inputStyle}/>
+        <form onSubmit={handleSubmit} style={formStyle} encType="multipart/form-data">
+            <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Title"
+                style={inputStyle}
+            />
+            <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Description"
+                style={{ ...inputStyle, height: '100px' }}
+            />
+            <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Price"
+                style={inputStyle}
+            />
+            <input
+                type="number"
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                placeholder="Year"
+                style={inputStyle}
+            />
+            <input
+                type="text"
+                name="engine"
+                value={formData.engine}
+                onChange={handleChange}
+                placeholder="Engine"
+                style={inputStyle}
+            />
 
-            <select name="region" value={formData.region} onChange={handleChange} style={inputStyle}>
-                <option value="">Выберите регион</option>
-                {regions.map((region, index) => (
-                    <option key={index} value={region[1]}>{region[0]}</option>
-                ))}
-            </select>
+           <select
+    name="region"
+    value={formData.region}
+    onChange={handleChange}
+    style={inputStyle}
+>
+    <option value="">Выберите регион</option>
+    {regions.map((region, index) => (
+        <option key={index} value={region[0]}>
+            {region[1]}
+        </option>
+    ))}
+</select>
 
-            <select name="currency" value={formData.currency} onChange={handleChange} style={inputStyle}>
+
+            <select
+                name="currency"
+                value={formData.currency}
+                onChange={handleChange}
+                style={inputStyle}
+            >
                 <option value="">Выберите валюту</option>
                 {currencies.map((currency) => (
                     <option key={currency.id} value={currency.id}>{currency.code}</option>
                 ))}
             </select>
 
-            <select name="brand" value={formData.brand} onChange={handleBrandChange} style={inputStyle}>
-                <option value="">Select Brand</option>
-                {brandsModels.brands.map(brand => (
+             <select
+            name="brand"
+            value={formData.brand}
+            onChange={handleBrandChange}
+            style={inputStyle}
+        >
+            <option value="">Select Brand</option>
+            {brandsModels.brands && brandsModels.brands.length > 0 ? (
+                brandsModels.brands.map(brand => (
                     <option key={brand.id} value={brand.id}>{brand.name}</option>
-                ))}
-            </select>
+                ))
+            ) : (
+                <option value="">No brands available</option>
+            )}
+        </select>
 
-            <select name="model_name" value={formData.model_name} onChange={handleChange} style={inputStyle}>
+            <select
+                name="model_name"
+                value={formData.model_name}
+                onChange={handleChange}
+                style={inputStyle}
+            >
                 <option value="">Select Model</option>
                 {models.map(model => (
                     <option key={model.id} value={model.id}>{model.name}</option>
                 ))}
             </select>
 
-            <select name="body_type" value={formData.body_type} onChange={handleChange} style={inputStyle}>
+            <select
+                name="body_type"
+                value={formData.body_type}
+                onChange={handleChange}
+                style={inputStyle}
+            >
                 <option value="">Select Body Type</option>
                 <option value="sedan">Sedan</option>
                 <option value="hatchback">Hatchback</option>
@@ -218,11 +282,11 @@ function ListingCreate() {
                 <option value="pickup">Pickup</option>
             </select>
 
-            <input type="file" name="listing_photo" onChange={handleFileChange} style={inputStyle}/>
+            <input type="file" name="listing_photo" onChange={handleFileChange} style={inputStyle} />
             <button type="submit" style={buttonStyle}>Create Listing</button>
-            {error && <p style={{color: 'red'}}>{error}</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
         </form>
     );
-
 }
+
 export default ListingCreate;

@@ -23,6 +23,7 @@ import DeleteListingPage from "./components/ListingsDeletion/ListingsDeletion";
 import RegistrationPage from "./components/RegistrationPage/RegistrationPage";
 import PasswordRecoveryRequest from "./components/RecoveryPassword/PasswordRecoveryRequest";
 import PasswordReset from "./components/RecoveryPassword/PasswordReset";
+import ChatPage from "./ChatPage/ChatPage";
 
 
 
@@ -33,27 +34,29 @@ export const App = () => {
         <Router>
             <Routes>
                  <Route path="/" element={<HomePage />} />
-               <Route path="/logIn" element={<LogIn />} />
+                 <Route path="/logIn" element={<LogIn />} />
 
                  <Route path="/activate/:token" element={<ActivateAccount />} />
                  <Route path="/profile" element={<UsersProfile />} />
-                <Route path="/addblacklist" element={<AddToBlacklist />} />
-                <Route path="/removeblacklist" element={<RemoveFromBlackList />} />
-              <Route path="/addavatar" element={<AddAvatar />} />
-                <Route path="/recoverpassword" element={<PasswordRecoveryRequest/>} />
-                <Route path="/recovery/:token" element={<PasswordReset/>} />
-                <Route path="/createmanager" element={<CreateManager />} />
-                <Route path="/upgradeaccount" element={<UpgradeAccount />} />
-                <Route path="/deleteaccount" element={<DeleteAccount />} />
-                <Route path="/logout" element={<LogOut />} />
-                <Route path="/listingcreate" element={<ListingCreate />} />
-                <Route path="/listingsuser" element={<ListingsUserPage />} />
-                <Route path="/listings/update/:id" element={<UpdateListingPage />} />
+                 <Route path="/addblacklist" element={<AddToBlacklist />} />
+                 <Route path="/removeblacklist" element={<RemoveFromBlackList />} />
+                 <Route path="/addavatar" element={<AddAvatar />} />
+                 <Route path="/recoverpassword" element={<PasswordRecoveryRequest/>} />
+                 <Route path="/recovery/:token" element={<PasswordReset/>} />
+                 <Route path="/createmanager" element={<CreateManager />} />
+                 <Route path="/upgradeaccount" element={<UpgradeAccount />} />
+                 <Route path="/deleteaccount" element={<DeleteAccount />} />
+                 <Route path="/logout" element={<LogOut />} />
+                 <Route path="/listingcreate" element={<ListingCreate />} />
+                 <Route path="/listingsuser" element={<ListingsUserPage />} />
+                 <Route path="/listings/update/:id" element={<UpdateListingPage />} />
                  <Route path="/listings/:id" element={<ListingDetailPage />} />
                  <Route path="/list" element={<CarListingsListPage />} />
-                 <Route path="/details/:id" element={<CarListingDetailPage />} />
-                <Route path="/delete/:id" element={<DeleteListingPage />} />
-                <Route path="/registration" element={<RegistrationPage />} />
+                 <Route path="/cardetails/:id" element={<CarListingDetailPage />} />
+                 <Route path="/delete/:id" element={<DeleteListingPage />} />
+                 <Route path="/registration" element={<RegistrationPage />} />
+                 <Route path="/chat/:listingId" element={<ChatPage />} />
+
 
 
             </Routes>
