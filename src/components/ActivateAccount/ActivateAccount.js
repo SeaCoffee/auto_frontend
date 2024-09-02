@@ -9,13 +9,12 @@ const ActivateAccount = () => {
 
     useEffect(() => {
     const activateUrl = `/api/auth/activate/${token}/`;
-    console.log("Activating URL: ", activateUrl);  // добавьте это для проверки
     axios.post(activateUrl)
         .then(response => {
             setStatus('Account activated successfully! Redirecting to login...');
             setTimeout(() => {
                 navigate('/login');
-            }, 3000); // 3 seconds delay
+            }, 3000);
         })
         .catch(error => {
             setStatus('Failed to activate account. The link may be expired or invalid.');

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const CarListingsListPage = () => {
+const AllListingsList = () => {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState('');
 
@@ -68,7 +68,7 @@ const CarListingsListPage = () => {
                 <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
               )}
               <div>
-                <Link to={`/cardetails/${listing.id}`} style={linkStyle}>View Details</Link>
+                <Link to={`/alllistingsdetails/${listing.id}`} style={linkStyle}>View Details</Link>
               </div>
             </li>
           ))
@@ -80,6 +80,6 @@ const CarListingsListPage = () => {
   );
 };
 
-export default CarListingsListPage;
+export default AllListingsList;
 
 

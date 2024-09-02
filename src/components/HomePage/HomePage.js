@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import {Link, Route} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UsersDetailsPage from "../UsersDetailsPage/UsersDetailsPage";
-import PasswordRecoveryRequest from "../RecoveryPassword/PasswordRecoveryRequest";
-import PasswordReset from "../RecoveryPassword/PasswordReset";
+
 
 const LinkItem = ({ to, children }) => {
   const [hover, setHover] = useState(false);
 
   const linkStyle = {
     textDecoration: 'none',
-    color: hover ? '#0056b3' : 'black', // Цвет текста изменяется при наведении
-    backgroundColor: hover ? '#e8f0fe' : 'transparent', // Фоновый цвет при наведении
+    color: hover ? '#0056b3' : 'black',
+    backgroundColor: hover ? '#e8f0fe' : 'transparent',
     padding: '10px',
     borderRadius: '5px',
     display: 'block', // Расширяет кликабельную область
@@ -30,36 +29,35 @@ const LinkItem = ({ to, children }) => {
     </li>
   );
 };
-
 const links = [
-
     { path: '/registration', label: 'Registration' },
-  { path: '/logIn', label: 'Log In' },
-  { path: '/activate/:token', label: 'Activate Account (open from email follow link)' },
-  { path: '/profile', label: 'User Profile (if you have)' },
+    { path: '/logIn', label: 'Log In' },
+    { path: '/activate/:token', label: 'Activate Account (open from email follow link)' },
+    { path: '/profile', label: 'User Profile (if you have one)' },
     { path: '/addavatar', label: 'Add Avatar' },
-    { path: '/upgradeaccount', label: 'Upgrade Account' },
-  { path: '/deleteaccount', label: 'Delete Account' },
-  { path: '/logout', label: 'Log Out' },
-    { path: "/recoverpassword", label: 'new password request'},
-    {path: "/recovery/:token", label: 'reset password'},
+    { path: '/upgradeaccount', label: 'Upgrade Account $' },
+    { path: "/recoverpassword", label: 'New password request' },
+    { path: "/recovery/:token", label: 'Reset password' },
+    { path: '/deleteaccount', label: 'Delete Account' },
+    { path: '/logout', label: 'Log Out' },
 
 
-     { path: '/createmanager', label: 'Create Manager (for superuser)' },
-     { path: '/addblacklist', label: 'Add to Blacklist (for manager)' },
-  { path: '/removeblacklist', label: 'Remove from Blacklist (for manager)' },
+    { path: '', label: '' },
+
+    { path: '/createmanager', label: 'Create Manager (for superuser)' },
+    { path: '/addblacklist', label: 'Add to Blacklist (for manager)' },
+    { path: '/removeblacklist', label: 'Remove from Blacklist (for manager)' },
 
 
+    { path: '', label: '' },
 
-  { path: '/listingcreate', label: 'Create Listing' },
-      { path: '/listings/update/:id', label: 'Update Listing' },
-
-      { path: '/list', label: 'All Car Listings' },
- { path: '/details/:id', label: 'Car Listing Details including stats for premium sellers (open page from All Car Listings)' },
-   { path: '/listingsuser', label: "User's Listings" },
-  { path: '/listings/:id', label: 'Listing Detail (open page from User\'s Listings)' },
-        { path: '/delete/:id', label: 'Delete Listing (open page from User\'s Listings)' },
-
+    { path: '/listingcreate', label: 'Create Listing (for sellers)' },
+    { path: '/listingsuserlist', label: "User's Listings List" },
+    { path: '/listings/update/:id', label: 'Update Listing (open from Users listings list)' },
+    { path: '/listingsuserdetails/:id', label: "Listing Detail (open page from User\'s Listings)" },
+    { path: '/delete/:id', label: "Delete Listing (open page from User\'s Listings)" },
+    { path: '/list', label: 'All Car Listings' },
+    { path: '/alllistingsdetails/:id', label: 'Car Listing Details including stats for premium sellers (open page from All Car Listings)' },
 
 ];
 
@@ -75,14 +73,14 @@ const HomePage = () => {
     }}>
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between', // Размещает дочерние элементы на противоположных концах
+        justifyContent: 'space-between',
         alignItems: 'center',
-        width: '100%' // Занимает всю доступную ширину
+        width: '100%'
       }}>
-        <div style={{ textAlign: 'left' }}> {/* Контейнер для заголовка */}
+        <div style={{ textAlign: 'left' }}>
           <h2>Welcome to Car Sales!</h2>
         </div>
-        <div style={{ textAlign: 'right' }}> {/* Контейнер для информации о пользователе */}
+        <div style={{ textAlign: 'right' }}>
           <UsersDetailsPage />
         </div>
       </div>

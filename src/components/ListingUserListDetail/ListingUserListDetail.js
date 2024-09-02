@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 
-const ListingDetailPage = () => {
+const ListingUserListDetail = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [error, setError] = useState('');
@@ -105,4 +105,4 @@ const ListingDetailPage = () => {
   );
 };
 
-export default ListingDetailPage;
+export default ListingUserListDetail;

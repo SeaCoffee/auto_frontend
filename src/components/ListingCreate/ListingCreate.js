@@ -125,7 +125,6 @@ function ListingCreate() {
             navigate(`/listingsuser`);
         }
 
-        navigate(`/upload-photo/${response.data.id}`);
     } catch (error) {
         console.error('Ошибка запроса:', error.response?.data || error.message);
         setError(error.response?.data?.detail || 'Произошла ошибка при создании объявления');
@@ -148,7 +147,7 @@ const handleBrandChange = (event) => {
         setModels(filteredModels);
     } else {
         console.error('brandsModels.brands_models не определен или пуст');
-        setModels([]); // Сбрасываем модели, если данные отсутствуют
+        setModels([]);
     }
 };
 

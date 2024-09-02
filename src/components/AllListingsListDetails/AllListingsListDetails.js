@@ -4,8 +4,7 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 
-
-const CarListingDetailPage = () => {
+const AllListingsListDetails = () => {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [stats, setStats] = useState(null);
@@ -14,8 +13,10 @@ const CarListingDetailPage = () => {
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
+  const [currentExchangeRate, setCurrentExchangeRate] = useState(null);
 
-  // Первый useEffect для декодирования токена и получения данных
+
+
   useEffect(() => {
     console.log('Attempting to decode token...');
     const token = localStorage.getItem('token');
@@ -61,6 +62,22 @@ const CarListingDetailPage = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+  if (listing && listing.currency_display) {
+    axios.get('/api/currencies/list/')
+      .then(response => {
+        const currencyData = response.data.find(currency => currency.code === listing.currency_display);
+        if (currencyData) {
+          setCurrentExchangeRate(currencyData.rate);
+        }
+      })
+      .catch(error => {
+        console.error('Failed to load exchange rate:', error);
+      });
+  }
+}, [listing]);
+
+
   // Подключение к WebSocket
   useEffect(() => {
     const connectToSocket = async () => {
@@ -74,7 +91,6 @@ const CarListingDetailPage = () => {
 
         newSocket.onmessage = (event) => {
           const messageData = JSON.parse(event.data);
-              console.log("Получено сообщение:", messageData);  // Это добавьте
           setChatMessages((prevMessages) => [...prevMessages, messageData]);
         };
 
@@ -117,63 +133,68 @@ const CarListingDetailPage = () => {
   }
 
   const containerStyle = {
-  padding: '20px',
-  maxWidth: '600px',
-  margin: 'auto',
-  border: '1px solid #ccc',
-  borderRadius: '8px',
-  backgroundColor: '#f9f9f9',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-};
+    padding: '20px',
+    maxWidth: '600px',
+    margin: 'auto',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    backgroundColor: '#f9f9f9',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+  };
 
-const imgStyle = {
-  width: '100%',
-  height: 'auto',
-  borderRadius: '8px',
-  margin: '20px 0',
-};
+  const imgStyle = {
+    width: '100%',
+    height: 'auto',
+    borderRadius: '8px',
+    margin: '20px 0',
+  };
 
-const titleStyle = {
-  fontSize: '24px',
-  marginBottom: '10px',
-  color: '#333',
-};
+  const titleStyle = {
+    fontSize: '24px',
+    marginBottom: '10px',
+    color: '#333',
+  };
 
-const priceStyle = {
-  fontSize: '18px',
-  fontWeight: 'bold',
-  margin: '10px 0',
-};
+  const priceStyle = {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    margin: '10px 0',
+  };
 
-const detailStyle = {
-  fontSize: '16px',
-  marginBottom: '10px',
-  color: '#555',
-};
+  const detailStyle = {
+    fontSize: '16px',
+    marginBottom: '10px',
+    color: '#555',
+  };
 
-const statsContainerStyle = {
-  marginTop: '20px',
-  padding: '10px',
-  backgroundColor: '#e9ecef',
-  borderRadius: '8px',
-};
+  const statsContainerStyle = {
+    marginTop: '20px',
+    padding: '10px',
+    backgroundColor: '#e9ecef',
+    borderRadius: '8px',
+  };
 
-const statItemStyle = {
-  marginBottom: '8px',
-  fontSize: '16px',
-};
+  const statItemStyle = {
+    marginBottom: '8px',
+    fontSize: '16px',
+  };
 
-return (
+  return (
   <div style={containerStyle}>
     <h2 style={titleStyle}>{listing.title}</h2>
     <p style={detailStyle}>{listing.description}</p>
-    <p style={priceStyle}>Price: {listing.price} {listing.currency}</p>
+    <p style={priceStyle}>
+      Price: {listing.price} {listing.currency_display}
+      <br />
+      Exchange Rate (Creation Time): {listing.price_uah / listing.price} {listing.currency_display}/UAH
+      <br />
+      Current Exchange Rate: {currentExchangeRate} {listing.currency_display}/UAH
+    </p>
     <p style={detailStyle}>Year: {listing.year}</p>
     <p style={detailStyle}>Engine: {listing.engine}</p>
     {listing.listing_photo && (
       <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
     )}
-
     {stats && (
       <div style={statsContainerStyle}>
         <h3>Statistics</h3>
@@ -182,11 +203,10 @@ return (
         <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country}</p>
       </div>
     )}
-
+    <div>
+      <h3>Listing chat</h3>
       <div>
-        <h3>Chat with Seller</h3>
-        <div>
-           {chatMessages.map((msg, index) => (
+        {chatMessages.map((msg, index) => (
           <div key={index}>{msg.user}: {msg.message}</div>
         ))}
       </div>
@@ -196,11 +216,12 @@ return (
         onChange={(e) => setMessage(e.target.value)}
       />
       <button onClick={sendMessage}>Send</button>
-      </div>
+    </div>
   </div>
 );
 
 };
 
-export default CarListingDetailPage
+export default AllListingsListDetails;
+
 
