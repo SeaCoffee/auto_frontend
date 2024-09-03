@@ -1,9 +1,5 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost';
-
-
-
 axios.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('token');

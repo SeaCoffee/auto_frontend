@@ -13,8 +13,6 @@ const AllListingsListDetails = () => {
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-  const [currentExchangeRate, setCurrentExchangeRate] = useState(null);
-
 
 
   useEffect(() => {
@@ -42,6 +40,7 @@ const AllListingsListDetails = () => {
           axios.get(`/api/listings/premium/${id}/stats/`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
+
             }
           })
             .then(response => {
@@ -61,22 +60,6 @@ const AllListingsListDetails = () => {
       console.error('Token not found');
     }
   }, [id]);
-
-  useEffect(() => {
-  if (listing && listing.currency_display) {
-    axios.get('/api/currencies/list/')
-      .then(response => {
-        const currencyData = response.data.find(currency => currency.code === listing.currency_display);
-        if (currencyData) {
-          setCurrentExchangeRate(currencyData.rate);
-        }
-      })
-      .catch(error => {
-        console.error('Failed to load exchange rate:', error);
-      });
-  }
-}, [listing]);
-
 
   // Подключение к WebSocket
   useEffect(() => {
@@ -180,33 +163,29 @@ const AllListingsListDetails = () => {
   };
 
   return (
-  <div style={containerStyle}>
-    <h2 style={titleStyle}>{listing.title}</h2>
-    <p style={detailStyle}>{listing.description}</p>
-    <p style={priceStyle}>
-      Price: {listing.price} {listing.currency_display}
-      <br />
-      Exchange Rate (Creation Time): {listing.price_uah / listing.price} {listing.currency_display}/UAH
-      <br />
-      Current Exchange Rate: {currentExchangeRate} {listing.currency_display}/UAH
-    </p>
-    <p style={detailStyle}>Year: {listing.year}</p>
-    <p style={detailStyle}>Engine: {listing.engine}</p>
-    {listing.listing_photo && (
-      <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
-    )}
-    {stats && (
-      <div style={statsContainerStyle}>
-        <h3>Statistics</h3>
-        <p style={statItemStyle}>Total Views: {stats.views_data.total_views}</p>
-        <p style={statItemStyle}>Average Price in Region: {stats.average_price_by_region}</p>
-        <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country}</p>
-      </div>
-    )}
-    <div>
-      <h3>Listing chat</h3>
+    <div style={containerStyle}>
+      <h2 style={titleStyle}>{listing.title}</h2>
+      <p style={detailStyle}>{listing.description}</p>
+      <p style={priceStyle}>Price: {listing.price} {listing.currency}</p>
+      <p style={detailStyle}>Year: {listing.year}</p>
+      <p style={detailStyle}>Engine: {listing.engine}</p>
+      {listing.listing_photo && (
+        <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
+      )}
+
+      {stats && (
+        <div style={statsContainerStyle}>
+          <h3>Statistics</h3>
+          <p style={statItemStyle}>Total Views: {stats.views_data.total_views}</p>
+          <p style={statItemStyle}>Average Price in Region: {stats.average_price_by_region}</p>
+          <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country}</p>
+        </div>
+      )}
+
       <div>
-        {chatMessages.map((msg, index) => (
+        <h3>Listing chat</h3>
+        <div>
+           {chatMessages.map((msg, index) => (
           <div key={index}>{msg.user}: {msg.message}</div>
         ))}
       </div>
@@ -216,11 +195,11 @@ const AllListingsListDetails = () => {
         onChange={(e) => setMessage(e.target.value)}
       />
       <button onClick={sendMessage}>Send</button>
+      </div>
     </div>
-  </div>
-);
-
+  );
 };
+
 
 export default AllListingsListDetails;
 

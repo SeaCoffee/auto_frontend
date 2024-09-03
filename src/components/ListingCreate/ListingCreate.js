@@ -122,7 +122,7 @@ function ListingCreate() {
 
         if (response.status === 201) {
             console.log('Объявление успешно создано', response.data);
-            navigate(`/listingsuser`);
+            navigate(`/listingsuserlist`);
         }
 
     } catch (error) {
@@ -225,16 +225,20 @@ const handleBrandChange = (event) => {
 
 
             <select
-                name="currency"
-                value={formData.currency}
-                onChange={handleChange}
-                style={inputStyle}
-            >
-                <option value="">Выберите валюту</option>
-                {currencies.map((currency) => (
-                    <option key={currency.id} value={currency.id}>{currency.code}</option>
-                ))}
-            </select>
+    name="currency"
+    value={formData.currency}
+    onChange={handleChange}
+    style={inputStyle}
+>
+    <option value="">Выберите валюту</option>
+    {currencies.map((currency) => (
+        <option key={currency.id} value={currency.id}>
+            {currency.currency_code} - {currency.rate}
+        </option>
+    ))}
+</select>
+
+
 
              <select
             name="brand"
