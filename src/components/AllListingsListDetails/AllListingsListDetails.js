@@ -162,7 +162,7 @@ const AllListingsListDetails = () => {
     fontSize: '16px',
   };
 
-  return (
+   return (
     <div style={containerStyle}>
       <h2 style={titleStyle}>{listing.title}</h2>
       <p style={detailStyle}>{listing.description}</p>
@@ -172,6 +172,9 @@ const AllListingsListDetails = () => {
       {listing.listing_photo && (
         <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
       )}
+
+      <p style={detailStyle}>Initial Rate: {listing.currency_rate}</p>
+      <p style={detailStyle}>Current Rate: {listing.current_currency_rate}</p>
 
       {stats && (
         <div style={statsContainerStyle}>
