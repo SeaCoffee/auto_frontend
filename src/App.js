@@ -24,6 +24,7 @@ import RegistrationPage from "./components/RegistrationPage/RegistrationPage";
 import PasswordRecoveryRequest from "./components/PasswordRecoveryRequest/PasswordRecoveryRequest";
 import PasswordReset from "./components/PasswordReset/PasswordReset";
 import ChatPage from "./components/ChatPage/ChatPage";
+import ListingSearch from "./components/ListingSearch/ListingSearch";
 
 
 
@@ -54,6 +55,7 @@ export const App = () => {
                  <Route path="/delete/:id" element={<DeleteListingPage />} />
                  <Route path="/registration" element={<RegistrationPage />} />
                 <Route path="/chat/:listingId" element={<ChatPage />} />
+                <Route path="/listingsearch" element={<ListingSearch />} />
             </Routes>
         </Router>
     );

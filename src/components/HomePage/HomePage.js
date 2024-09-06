@@ -58,7 +58,7 @@ const links = [
     { path: '/delete/:id', label: "Delete Listing (open page from User\'s Listings)" },
     { path: '/list', label: 'All Car Listings' },
     { path: '/alllistingsdetails/:id', label: 'Car Listing Details including stats for premium sellers (open page from All Car Listings)' },
-
+    { path: '/listingsearch', label: 'Search listings with filters' },
 ];
 
 const HomePage = () => {
