@@ -139,6 +139,14 @@ const ListingsUserList = () => {
     borderRadius: '8px',
   };
 
+  const imgStyle = {
+  maxWidth: '300px',  // Ограничиваем максимальную ширину
+  height: 'auto',     // Высота будет автоматически подстраиваться
+  borderRadius: '8px', // Радиус закругления углов
+  margin: '20px 0',
+};
+
+
   return (
     <div style={containerStyle}>
       <h2>Your Listings</h2>

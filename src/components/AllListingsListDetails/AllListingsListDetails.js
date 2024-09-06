@@ -14,6 +14,8 @@ const AllListingsListDetails = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
 
+  const API_BASE_URL = 'http://localhost';
+
 
   useEffect(() => {
     console.log('Attempting to decode token...');
@@ -126,11 +128,12 @@ const AllListingsListDetails = () => {
   };
 
   const imgStyle = {
-    width: '100%',
-    height: 'auto',
-    borderRadius: '8px',
-    margin: '20px 0',
-  };
+  maxWidth: '300px',  // Ограничиваем максимальную ширину
+  height: 'auto',     // Высота будет автоматически подстраиваться
+  borderRadius: '8px', // Радиус закругления углов
+  margin: '20px 0',
+};
+
 
   const titleStyle = {
     fontSize: '24px',
@@ -161,6 +164,8 @@ const AllListingsListDetails = () => {
     marginBottom: '8px',
     fontSize: '16px',
   };
+  console.log(listing.listing_photo);
+
 
    return (
     <div style={containerStyle}>
@@ -170,9 +175,13 @@ const AllListingsListDetails = () => {
       <p style={detailStyle}>Year: {listing.year}</p>
       <p style={detailStyle}>Engine: {listing.engine}</p>
       {listing.listing_photo && (
-        <img src={listing.listing_photo} alt={listing.title} style={imgStyle} />
-      )}
+      <img
+  src={listing.listing_photo} // Используем только значение из API без добавления базового URL
+  alt={listing.title}
+  style={imgStyle}
+/>
 
+    )}
        <p style={detailStyle}>Initial Rate: {listing.initial_currency_rate}</p>
     <p style={detailStyle}>Current Rate: {listing.current_currency_rate}</p>
 

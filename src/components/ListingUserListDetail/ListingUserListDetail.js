@@ -39,11 +39,11 @@ const ListingUserListDetail = () => {
   };
 
   const imgStyle = {
-    width: '100%',
-    height: 'auto',
-    borderRadius: '8px',
-    margin: '20px 0',
-  };
+  maxWidth: '300px',  // Ограничиваем максимальную ширину
+  height: 'auto',     // Высота будет автоматически подстраиваться
+  borderRadius: '8px', // Радиус закругления углов
+  margin: '20px 0',
+};
 
   const titleStyle = {
     fontSize: '24px',

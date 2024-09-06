@@ -48,11 +48,12 @@ const AllListingsList = () => {
   };
 
   const imgStyle = {
-    maxWidth: '100%',
-    height: 'auto',
-    borderRadius: '4px',
-    margin: '10px 0'
-  };
+  maxWidth: '200px',  // Ограничиваем максимальную ширину
+  height: 'auto',     // Высота будет автоматически подстраиваться
+  borderRadius: '8px', // Радиус закругления углов
+  margin: '20px 0',
+};
+
 
   return (
     <div style={containerStyle}>
