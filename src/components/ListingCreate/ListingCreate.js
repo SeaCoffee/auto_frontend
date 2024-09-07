@@ -87,36 +87,43 @@ function ListingCreate() {
     }, []);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-        const formDataToSend = new FormData();
-        Object.keys(formData).forEach(key => {
-            let value = formData[key];
-            if (['price', 'year', 'engine', 'currency', 'brand', 'model_name'].includes(key)) {
-                value = parseInt(value, 10);
-            }
-            formDataToSend.append(key, value);
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach(key => {
+        let value = formData[key];
+        if (['price', 'year', 'engine', 'currency', 'brand', 'model_name'].includes(key)) {
+            value = parseInt(value, 10);
+        }
+        formDataToSend.append(key, value);
+    });
+
+    try {
+        const response = await axios.post('api/listings/create/', formDataToSend, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
-        try {
-            const response = await axios.post('api/listings/create/', formDataToSend, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+        if (response.status === 201) {
+            console.log('Объявление успешно создано', response.data);
+            navigate('/listingsuserlist');
+        }
 
-            if (response.status === 201) {
-                console.log('Объявление успешно создано', response.data);
-                navigate('/listingsuserlist');
-            }
-
-        } catch (error) {
+    } catch (error) {
+        if (error.response?.data?.detail === "The description contains prohibited words. Please edit and resubmit.") {
+            // Если сервер вернул сообщение о запретных словах
+            setError('В описании объявления найдены запрещённые слова. Пожалуйста, исправьте и отправьте снова.');
+        } else {
+            // Обработка других ошибок
             console.error('Ошибка запроса:', error.response?.data || error.message);
             setError(error.response?.data?.detail || 'Произошла ошибка при создании объявления');
         }
-    };
+    }
+};
+
 
     const handleBrandChange = (event) => {
         const brandId = event.target.value;
