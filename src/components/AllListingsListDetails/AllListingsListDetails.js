@@ -14,8 +14,6 @@ const AllListingsListDetails = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  const API_BASE_URL = 'http://localhost';
-
 
   useEffect(() => {
     console.log('Attempting to decode token...');

@@ -48,9 +48,9 @@ const AllListingsList = () => {
   };
 
   const imgStyle = {
-  maxWidth: '200px',  // Ограничиваем максимальную ширину
-  height: 'auto',     // Высота будет автоматически подстраиваться
-  borderRadius: '8px', // Радиус закругления углов
+  maxWidth: '200px',
+  height: 'auto',
+  borderRadius: '8px',
   margin: '20px 0',
 };
 

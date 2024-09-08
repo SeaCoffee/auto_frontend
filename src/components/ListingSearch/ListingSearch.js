@@ -90,7 +90,7 @@ function ListingSearch() {
     const selectedRegion = event.target.value;
     setFilters((prevFilters) => ({
         ...prevFilters,
-        region: selectedRegion, // Устанавливаем значение напрямую, без преобразования
+        region: selectedRegion,
     }));
 }
 
@@ -104,10 +104,9 @@ function ListingSearch() {
                 }
             });
 
-            console.log('Регион перед отправкой:', params.region); // Логирование региона
 
             if (params.region === '' || isNaN(params.region)) {
-                delete params.region; // Удаляем регион из запроса, если он некорректен
+                delete params.region;
             }
 
             try {
@@ -128,8 +127,8 @@ function ListingSearch() {
     }
 
     return regions.map((region) => (
-        <option key={region[0]} value={region[0]}> {/* region[0] — это числовой индекс */}
-            {region[1]} {/* region[1] — название региона */}
+        <option key={region[0]} value={region[0]}>
+            {region[1]}
         </option>
     ));
 
@@ -236,7 +235,7 @@ function ListingSearch() {
                  <select
                 name="region"
                 value={filters.region}
-                onChange={handleRegionChange} // Обработчик с преобразованием в число
+                onChange={handleRegionChange}
                 style={inputStyle}
             >
                 <option value="">Выберите регион</option>
@@ -261,7 +260,6 @@ function ListingSearch() {
                     />
                 </label>
 
-                {/* Поля для года, цены и других параметров */}
                 <input
                     type="number"
                     name="min_year"

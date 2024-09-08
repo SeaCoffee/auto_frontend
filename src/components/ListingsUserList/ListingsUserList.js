@@ -7,7 +7,7 @@ const ListingsUserList = () => {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState('');
   const [socket, setSocket] = useState(null);
-  const [chatMessages, setChatMessages] = useState([]); // Состояние для сообщений чата
+  const [chatMessages, setChatMessages] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const ListingsUserList = () => {
         try {
           const socketToken = await axios.get('/api/auth/soket/');
           if (socketToken) {
-            const listingId = listings[0].id; // Подключаемся к WebSocket для первого объявления
+            const listingId = listings[0].id;
             const newSocket = new WebSocket(`ws://localhost/api/chat/${listingId}/?token=${socketToken.data.token}`);
 
             newSocket.onopen = () => {
@@ -140,9 +140,9 @@ const ListingsUserList = () => {
   };
 
   const imgStyle = {
-  maxWidth: '300px',  // Ограничиваем максимальную ширину
-  height: 'auto',     // Высота будет автоматически подстраиваться
-  borderRadius: '8px', // Радиус закругления углов
+  maxWidth: '300px',
+  height: 'auto',
+  borderRadius: '8px',
   margin: '20px 0',
 };
 

@@ -16,7 +16,6 @@ const LogIn = () => {
             try {
                 const decodedToken = jwtDecode(token);
                 console.log('Token decoded:', decodedToken);
-                // Добавьте логику проверки токена, если нужно
             } catch (err) {
                 console.error('Failed to decode token:', err);
                 localStorage.removeItem('token');

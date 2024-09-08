@@ -22,7 +22,7 @@ function NewBrandRequest() {
                 },
             });
             setMessage('Запрос на добавление бренда успешно отправлен менеджеру');
-            setNewBrandName(''); // Очистить поле после успешной отправки
+            setNewBrandName('');
         } catch (error) {
             console.error('Ошибка при отправке запроса на новый бренд:', error.response?.data || error.message);
             setError('Ошибка при отправке запроса. Попробуйте снова.');

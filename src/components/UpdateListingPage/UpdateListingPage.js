@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const UpdateListingPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams();  // Получаем id из URL
+  const { id } = useParams();
   const [listing, setListing] = useState({
     title: '',
     description: '',
