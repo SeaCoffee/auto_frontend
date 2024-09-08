@@ -227,10 +227,11 @@ function ListingCreate() {
                     style={inputStyle}
                 >
                     <option value="">Select Brand</option>
-                    {brandsModels.brands.map(brand => (
+                    {Array.isArray(brandsModels.brands) && brandsModels.brands.map(brand => (
                         <option key={brand.id} value={brand.id}>{brand.name}</option>
                     ))}
                 </select>
+
 
                 <select
                     name="model_name"

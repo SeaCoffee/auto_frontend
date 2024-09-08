@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const UpdateListingPage = () => {
   const navigate = useNavigate();
@@ -10,13 +10,20 @@ const UpdateListingPage = () => {
     description: '',
     price: '',
     currency: '',
-    listing_photo: null,
+    listing_photo: null, // Это для новой фотографии
+    listing_photo_url: '', // Это для текущего URL фото
   });
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Получаем данные объявления
     axios.get(`/api/listings/details/${id}/`)
-      .then(response => setListing(response.data))
+      .then(response => {
+        setListing({
+          ...response.data,
+          listing_photo_url: response.data.listing_photo, // Предположительно URL текущей фотографии
+        });
+      })
       .catch(error => setError('Failed to load listing data'));
   }, [id]);
 
@@ -30,24 +37,45 @@ const UpdateListingPage = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', listing.title);
-    formData.append('description', listing.description);
-    formData.append('price', listing.price);
-    formData.append('currency', listing.currency);
-    if (listing.listing_photo) {
-      formData.append('listing_photo', listing.listing_photo);
-    }
+  e.preventDefault();
+  const formData = new FormData();
+  formData.append('title', listing.title);
+  formData.append('description', listing.description);
+  formData.append('price', listing.price);
+  formData.append('currency', listing.currency);
 
-    axios.put(`/api/listings/update/${id}/`, formData)
+  // Если есть фото, отправляем запрос с FormData (multipart)
+  if (listing.listing_photo) {
+    formData.append('listing_photo', listing.listing_photo);
+
+    axios.put(`/api/listings/update/${id}/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
       .then(() => navigate('/listingsuserlist'))
       .catch(error => {
         const serverError = error.response?.data || 'Failed to update listing';
         setError(serverError);
         console.error('Error updating listing:', serverError);
       });
-  };
+  } else {
+    // Если фото нет, отправляем JSON
+    axios.put(`/api/listings/update/${id}/`, {
+      title: listing.title,
+      description: listing.description,
+      price: listing.price,
+      currency: listing.currency,
+    })
+      .then(() => navigate('/listingsuserlist'))
+      .catch(error => {
+        const serverError = error.response?.data || 'Failed to update listing';
+        setError(serverError);
+        console.error('Error updating listing:', serverError);
+      });
+  }
+};
+
 
   const formStyle = {
     display: 'flex',
@@ -100,7 +128,8 @@ const UpdateListingPage = () => {
         <label style={labelStyle}>Currency</label>
         <input type="text" name="currency" value={listing.currency} onChange={handleChange} style={inputStyle} />
 
-        <label style={labelStyle}>Listing Photo</label>
+
+        <label style={labelStyle}>Update Photo</label>
         <input type="file" name="listing_photo" onChange={handleFileChange} style={inputStyle} />
 
         <button type="submit" style={buttonStyle}>Update</button>
@@ -111,3 +140,4 @@ const UpdateListingPage = () => {
 };
 
 export default UpdateListingPage;
+

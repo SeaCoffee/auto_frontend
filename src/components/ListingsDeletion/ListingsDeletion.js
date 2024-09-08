@@ -9,7 +9,7 @@ const DeleteListingPage = () => {
   const [error, setError] = React.useState('');
 
   const handleDelete = () => {
-    axios.delete(`api/listings/delete/${id}/`)
+  axios.delete(`/api/listings/delete/${id}/`)
       .then(() => {
         navigate('/listingsuserlist');
       })
