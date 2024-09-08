@@ -37,7 +37,7 @@ const links = [
     { path: '/addavatar', label: 'Add Avatar' },
     { path: '/upgradeaccount', label: 'Upgrade Account $' },
     { path: "/recoverpassword", label: 'New password request' },
-    { path: "/recovery/:token", label: 'Reset password' },
+    { path: "/recovery/:token", label: 'Reset password (open from email' },
     { path: '/deleteaccount', label: 'Delete Account' },
     { path: '/logout', label: 'Log Out' },
 

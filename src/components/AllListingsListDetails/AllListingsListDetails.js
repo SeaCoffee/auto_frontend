@@ -14,6 +14,13 @@ const AllListingsListDetails = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [socket, setSocket] = useState(null);
 
+  // Маппинг ID валют к обозначениям
+  const currencySymbols = {
+    1: '$',  // USD
+    2: '€',  // EUR
+    3: '₴',  // UAH
+    // Добавьте другие валюты, если нужно
+  };
 
   useEffect(() => {
     console.log('Attempting to decode token...');
@@ -40,7 +47,6 @@ const AllListingsListDetails = () => {
           axios.get(`/api/listings/premium/${id}/stats/`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`
-
             }
           })
             .then(response => {
@@ -94,7 +100,11 @@ const AllListingsListDetails = () => {
     };
   }, [id]);
 
-  // Функция для отправки сообщения
+
+  useEffect(() => {
+    console.log('Current stats state:', stats);
+  }, [stats]);
+
   const sendMessage = () => {
     if (socket && message.trim()) {
       socket.send(JSON.stringify({
@@ -126,12 +136,11 @@ const AllListingsListDetails = () => {
   };
 
   const imgStyle = {
-  maxWidth: '300px',  // Ограничиваем максимальную ширину
-  height: 'auto',     // Высота будет автоматически подстраиваться
-  borderRadius: '8px', // Радиус закругления углов
-  margin: '20px 0',
-};
-
+    maxWidth: '300px',  // Ограничиваем максимальную ширину
+    height: 'auto',     // Высота будет автоматически подстраиваться
+    borderRadius: '8px', // Радиус закругления углов
+    margin: '20px 0',
+  };
 
   const titleStyle = {
     fontSize: '24px',
@@ -162,55 +171,50 @@ const AllListingsListDetails = () => {
     marginBottom: '8px',
     fontSize: '16px',
   };
-  console.log(listing.listing_photo);
 
-
-   return (
+  return (
     <div style={containerStyle}>
       <h2 style={titleStyle}>{listing.title}</h2>
       <p style={detailStyle}>{listing.description}</p>
-      <p style={priceStyle}>Price: {listing.price} {listing.currency}</p>
+      <p style={priceStyle}>Price: {listing.price} {currencySymbols[listing.currency] || listing.currency}</p>
       <p style={detailStyle}>Year: {listing.year}</p>
       <p style={detailStyle}>Engine: {listing.engine}</p>
       {listing.listing_photo && (
-      <img
-  src={listing.listing_photo} // Используем только значение из API без добавления базового URL
-  alt={listing.title}
-  style={imgStyle}
-/>
-
-    )}
-       <p style={detailStyle}>Initial Rate: {listing.initial_currency_rate}</p>
-    <p style={detailStyle}>Current Rate: {listing.current_currency_rate}</p>
+        <img
+          src={listing.listing_photo} // Используем только значение из API без добавления базового URL
+          alt={listing.title}
+          style={imgStyle}
+        />
+      )}
+      <p style={detailStyle}>Initial Rate: {listing.initial_currency_rate}</p>
+      <p style={detailStyle}>Current Rate: {listing.current_currency_rate}</p>
 
       {stats && (
         <div style={statsContainerStyle}>
           <h3>Statistics</h3>
-          <p style={statItemStyle}>Total Views: {stats.views_data.total_views}</p>
-          <p style={statItemStyle}>Average Price in Region: {stats.average_price_by_region}</p>
-          <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country}</p>
+          <p style={statItemStyle}>Total Views: {stats.total_views || 'N/A'}</p>
+          <p style={statItemStyle}>Average Price in Region: {stats.average_price_by_region || 'N/A'}</p>
+          <p style={statItemStyle}>Average Price in Country: {stats.average_price_by_country || 'N/A'}</p>
         </div>
       )}
 
       <div>
         <h3>Listing chat</h3>
         <div>
-           {chatMessages.map((msg, index) => (
-          <div key={index}>{msg.user}: {msg.message}</div>
-        ))}
-      </div>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <button onClick={sendMessage}>Send</button>
+          {chatMessages.map((msg, index) => (
+            <div key={index}>{msg.user}: {msg.message}</div>
+          ))}
+        </div>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button onClick={sendMessage}>Send</button>
       </div>
     </div>
   );
 };
 
-
 export default AllListingsListDetails;
-
 

@@ -51,16 +51,18 @@ function ListingCreate() {
     };
 
     useEffect(() => {
-        const fetchBrandModelData = async () => {
-            try {
-                const { data } = await axios.get('api/cars/data/');
-                setBrandsModels(data);
-            } catch (error) {
-                setError('Ошибка при загрузке данных о брендах и моделях');
-            }
-        };
-        fetchBrandModelData();
-    }, []);
+    const fetchBrandModelData = async () => {
+        try {
+            const { data } = await axios.get('api/cars/data/');
+            console.log("Данные, полученные с сервера:", data);  // Логируем данные с сервера
+            setBrandsModels(data);
+        } catch (error) {
+            setError('Ошибка при загрузке данных о брендах и моделях');
+        }
+    };
+    fetchBrandModelData();
+}, []);
+
 
     useEffect(() => {
         const fetchRegions = async () => {
@@ -125,17 +127,31 @@ function ListingCreate() {
 };
 
 
-    const handleBrandChange = (event) => {
-        const brandId = event.target.value;
-        setFormData({ ...formData, brand: brandId, model_name: '' });
+   const handleBrandChange = (event) => {
+    const brandId = parseInt(event.target.value, 10);  // Приводим значение к числу
+    console.log("Выбранный brandId:", brandId);  // Логируем brandId
+    console.log("Ключи brandsModels:", Object.keys(brandsModels));  // Логируем ключи brandsModels
 
-        if (brandsModels && brandsModels.brands_models) {
-            const filteredModels = brandsModels.brands_models[brandId] || [];
-            setModels(filteredModels);
-        } else {
-            setModels([]);
-        }
-    };
+    setFormData({ ...formData, brand: brandId, model_name: '' });
+
+    if (brandsModels && brandsModels.brands_models && brandsModels.brands_models[brandId]) {  // Доступ к brands_models
+        const filteredModels = brandsModels.brands_models[brandId];  // Извлекаем модели из правильного поля
+        console.log("Модели для выбранного бренда:", filteredModels);  // Логируем модели для бренда
+        setModels(filteredModels);  // Устанавливаем модели
+    } else {
+        console.log("Модели не найдены для brandId:", brandId);  // Логируем отсутствие моделей
+        setModels([]);
+    }
+};
+
+
+
+   useEffect(() => {
+    console.log("Состояние моделей изменилось:", models);
+}, [models]);
+
+
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -234,16 +250,18 @@ function ListingCreate() {
 
 
                 <select
-                    name="model_name"
-                    value={formData.model_name}
-                    onChange={handleChange}
-                    style={inputStyle}
-                >
-                    <option value="">Select Model</option>
-                    {models.map(model => (
-                        <option key={model.id} value={model.id}>{model.name}</option>
-                    ))}
-                </select>
+                name="model_name"
+                value={formData.model_name}
+                onChange={handleChange}
+                style={inputStyle}
+            >
+                <option value="">Select Model</option>
+                {models.map(model => (
+                    <option key={model.id} value={model.id}>{model.name}</option>  // Правильное отображение модели
+                ))}
+            </select>
+
+
 
                 <select
                     name="body_type"

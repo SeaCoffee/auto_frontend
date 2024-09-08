@@ -33,48 +33,45 @@ const UpdateListingPage = () => {
   };
 
   const handleFileChange = (e) => {
-    setListing({ ...listing, listing_photo: e.target.files[0] });
-  };
+    const file = e.target.files[0]; // Получаем файл
+    if (file) {
+        setListing({ ...listing, listing_photo: file });
+    }
+};
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
-  const formData = new FormData();
-  formData.append('title', listing.title);
-  formData.append('description', listing.description);
-  formData.append('price', listing.price);
-  formData.append('currency', listing.currency);
 
-  // Если есть фото, отправляем запрос с FormData (multipart)
-  if (listing.listing_photo) {
-    formData.append('listing_photo', listing.listing_photo);
+const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', listing.title);
+    formData.append('description', listing.description);
+    formData.append('price', listing.price);
+    formData.append('currency', listing.currency);
+
+    // Проверяем, является ли listing_photo объектом файла (а не URL)
+    if (listing.listing_photo instanceof File) {
+        formData.append('listing_photo', listing.listing_photo);
+    }
+
+    // Логируем содержимое formData для проверки, что именно отправляется
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
 
     axios.put(`/api/listings/update/${id}/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     })
-      .then(() => navigate('/listingsuserlist'))
-      .catch(error => {
+    .then(() => navigate('/listingsuserlist'))
+    .catch(error => {
         const serverError = error.response?.data || 'Failed to update listing';
         setError(serverError);
         console.error('Error updating listing:', serverError);
-      });
-  } else {
-    // Если фото нет, отправляем JSON
-    axios.put(`/api/listings/update/${id}/`, {
-      title: listing.title,
-      description: listing.description,
-      price: listing.price,
-      currency: listing.currency,
-    })
-      .then(() => navigate('/listingsuserlist'))
-      .catch(error => {
-        const serverError = error.response?.data || 'Failed to update listing';
-        setError(serverError);
-        console.error('Error updating listing:', serverError);
-      });
-  }
+    });
 };
+
+
 
 
   const formStyle = {
