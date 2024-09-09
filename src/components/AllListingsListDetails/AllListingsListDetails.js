@@ -136,9 +136,9 @@ const AllListingsListDetails = () => {
   };
 
   const imgStyle = {
-    maxWidth: '300px',  // Ограничиваем максимальную ширину
-    height: 'auto',     // Высота будет автоматически подстраиваться
-    borderRadius: '8px', // Радиус закругления углов
+    maxWidth: '300px',
+    height: 'auto',
+    borderRadius: '8px',
     margin: '20px 0',
   };
 
@@ -181,7 +181,7 @@ const AllListingsListDetails = () => {
       <p style={detailStyle}>Engine: {listing.engine}</p>
       {listing.listing_photo && (
         <img
-          src={listing.listing_photo} // Используем только значение из API без добавления базового URL
+          src={listing.listing_photo}
           alt={listing.title}
           style={imgStyle}
         />
